@@ -11,4 +11,4 @@ class City(Base):
     name = Column(String(100), nullable=False, unique=True)
     additional_info = Column(Text, nullable=True)
 
-    # temperature = relationship("Temperature", back_populates="city")
+    temperature = relationship("Temperature", back_populates="city")

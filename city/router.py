@@ -40,7 +40,7 @@ async def update_city(
     return city
 
 
-@router.delete("/cities/{citi_id}", response_model=dict)
+@router.delete("/cities/{city_id}", response_model=dict)
 async def delete_city(
     city_id: int,
     db: AsyncSession = Depends(get_db)

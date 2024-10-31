@@ -4,7 +4,7 @@ import os
 
 import httpx
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 async def fetch_temperature_from_weather_api(city_name: str):
-    with httpx.AsyncClient() as session:
+    async with httpx.AsyncClient() as session:
         url = f"{WEATHER_URL}?key={WEATHER_API_KEY}&q={city_name}"
         response = await session.get(url)
         if response.status_code == 200:
@@ -51,12 +51,12 @@ async def create_temperature(
 
 async def get_temperatures(
     db: AsyncSession,
-    city_id: int | None = None
-) -> list[Temperature]:
+    city_id: Optional[int] = None
+) -> List[Temperature]:
     temperatures = select(Temperature)
     if city_id:
         temperatures = temperatures.filter(Temperature.city_id == city_id)
-    result = db.execute(temperatures)
+    result = await db.execute(temperatures)
     return result.scalars().all()
 
 
